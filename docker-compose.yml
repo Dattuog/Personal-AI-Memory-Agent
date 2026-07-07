@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - chroma_data:/app/chroma_data
+    depends_on:
+      - chroma
+
+  daemon:
+    build:
+      context: .
+      dockerfile: Dockerfile.daemon
+    env_file: .env
+    volumes:
+      - chroma_data:/app/chroma_data
+    depends_on:
+      - chroma
+
+  chroma:
+    image: chromadb/chroma
+    ports:
+      - "8001:8000"
+    volumes:
+      - chroma_server_data:/chroma/chroma
+
+volumes:
+  chroma_data:
+  chroma_server_data:

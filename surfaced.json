@@ -1,0 +1,91 @@
+[
+  {
+    "clipboard_text": "# Python\n__pycache__/\n*.py[cod]\n*.so\n\n# Virtual Environment\nvenv/\n.venv/\nenv/\n\n# Environment variables\n.env\n\n# VS Code\n.vscode/\n\n# macOS\n.DS_Store\n\n# Logs\n*.log\n\n# Jupyter\n.ipynb_checkpoints/\n\n# Build\nbuild/\ndist/\n*.egg-info/",
+    "ingested_ids": [
+      "8b0e6c5d-62fb-4244-bc6b-435bae911d6b:0"
+    ],
+    "related": [
+      {
+        "id": "0a5a0f21-91bb-4b39-819b-746e8e18d74a:0",
+        "text": "source venv/bin/activate",
+        "metadata": {
+          "chunk_index": 0,
+          "source": "clipboard",
+          "timestamp": 1783416102.6200078,
+          "tags": "",
+          "parent_id": "0a5a0f21-91bb-4b39-819b-746e8e18d74a"
+        },
+        "distance": 0.6562514305114746,
+        "score_type": "distance"
+      },
+      {
+        "id": "68d513d7-cf95-457a-b5fc-c00ae1fe80a0:0",
+        "text": "avikoti-deekshith@ravikoti-deekshith-VirtualBox:~/Desktop/PAMA$ git status fatal: not a git repository (or any of the parent directories): .git ravikoti-deekshith@ravikoti-deekshith-VirtualBox:~/Desktop/PAMA$",
+        "metadata": {
+          "parent_id": "68d513d7-cf95-457a-b5fc-c00ae1fe80a0",
+          "chunk_index": 0,
+          "tags": "",
+          "timestamp": 1783416721.834613,
+          "source": "clipboard"
+        },
+        "distance": 0.7459145784378052,
+        "score_type": "distance"
+      }
+    ]
+  },
+  {
+    "clipboard_text": "curl -X POST http://localhost:8000/query \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"query\":\"What travel admin should I remember?\",\"top_k\":5}'",
+    "ingested_ids": [
+      "d64362f9-50fb-48b2-9278-2d93cb3c054d:0"
+    ],
+    "related": [
+      {
+        "id": "f5ac851f-ede5-4b52-8cd2-ef13751d1794:0",
+        "text": "curl -X POST http://localhost:8000/ingest \\ -H 'Content-Type: application/json' \\ -d '{\"text\":\"Renew my passport before the September trip.\",\"tags\":[\"travel\"]}'",
+        "metadata": {
+          "chunk_index": 0,
+          "timestamp": 1783415781.4311569,
+          "parent_id": "f5ac851f-ede5-4b52-8cd2-ef13751d1794",
+          "source": "clipboard",
+          "tags": ""
+        },
+        "distance": 0.22918272018432617,
+        "score_type": "distance"
+      },
+      {
+        "id": "1926626a-37ad-46df-9c2c-58f013df2e05:0",
+        "text": "curl http://localhost:8000/health",
+        "metadata": {
+          "tags": "",
+          "timestamp": 1783415666.2901678,
+          "parent_id": "1926626a-37ad-46df-9c2c-58f013df2e05",
+          "chunk_index": 0,
+          "source": "clipboard"
+        },
+        "distance": 0.4703993797302246,
+        "score_type": "distance"
+      }
+    ]
+  },
+  {
+    "clipboard_text": "curl -X POST http://localhost:8000/ingest \\\n  -H 'Content-Type: application/json' \\\n  -d '{\"text\":\"Renew my passport before the September trip.\",\"tags\":[\"travel\"]}'",
+    "ingested_ids": [
+      "f5ac851f-ede5-4b52-8cd2-ef13751d1794:0"
+    ],
+    "related": [
+      {
+        "id": "1926626a-37ad-46df-9c2c-58f013df2e05:0",
+        "text": "curl http://localhost:8000/health",
+        "metadata": {
+          "tags": "",
+          "source": "clipboard",
+          "parent_id": "1926626a-37ad-46df-9c2c-58f013df2e05",
+          "chunk_index": 0,
+          "timestamp": 1783415666.2901678
+        },
+        "distance": 0.4715462923049927,
+        "score_type": "distance"
+      }
+    ]
+  }
+]

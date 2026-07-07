@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+chromadb
+groq
+sentence-transformers
+openai
+pinecone-client
+pyperclip
+python-dotenv
+pytest
+httpx
