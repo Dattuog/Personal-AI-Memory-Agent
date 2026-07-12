@@ -41,3 +41,31 @@ def test_ingest_and_query_end_to_end_with_monkeypatch(monkeypatch) -> None:
     body = query_response.model_dump()
     assert "blue folder" in body["answer"]
     assert body["sources"][0]["metadata"]["source"] == "manual"
+
+def test_list_memories_endpoint(monkeypatch) -> None:
+    from app.main import list_memories
+
+    class FakeStore:
+        def list_all(self, limit: int = 1000):
+            assert limit == 3
+            return [
+                {
+                    "id": "memory-1",
+                    "text": "Project notes live in the blue folder.",
+                    "metadata": {"source": "manual"},
+                }
+            ]
+
+    monkeypatch.setattr("app.main.get_vector_store", lambda: FakeStore())
+
+    assert list_memories(limit=3) == {
+        "count": 1,
+        "memories": [
+            {
+                "id": "memory-1",
+                "text": "Project notes live in the blue folder.",
+                "metadata": {"source": "manual"},
+            }
+        ],
+    }
+

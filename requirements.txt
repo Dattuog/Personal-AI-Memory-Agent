@@ -12,3 +12,7 @@ plyer
 python-dotenv
 pytest
 httpx
+streamlit
+requests
+pandas
+

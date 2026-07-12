@@ -12,6 +12,7 @@ from app.daemon import read_surfaced
 from app.ingestion.ingest import ingest_entry
 from app.models import IngestRequest, IngestResponse, QueryRequest, QueryResponse, QueryResult
 from app.retrieval.retrieve import retrieve_and_rerank
+from app.storage import get_vector_store
 from app.synthesis import get_llm_provider
 
 SIMPLE_QUERY_SYSTEM_PROMPT = """You are a personal memory assistant. You can either answer the user's question using the provided memories, or call a tool if the user is asking you to remember or remind them of something actionable.
@@ -88,6 +89,13 @@ def surfaced() -> list[dict]:
     return read_surfaced()
 
 
+@app.get("/memories")
+def list_memories(limit: int = 200) -> dict[str, Any]:
+    store = get_vector_store()
+    memories = store.list_all(limit=limit)
+    return {"count": len(memories), "memories": memories}
+
+
 @app.get("/reminders")
 def list_reminders() -> dict[str, list[dict[str, Any]]]:
     path = Path("reminders.json")
@@ -100,3 +108,4 @@ def list_reminders() -> dict[str, list[dict[str, Any]]]:
 def trigger_self_review() -> dict[str, Any]:
     flagged = run_self_review()
     return {"flagged_count": len(flagged), "flagged": flagged}
+
