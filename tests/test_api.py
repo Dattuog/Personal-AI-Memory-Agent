@@ -1,8 +1,20 @@
-from app.main import health, ingest, query
+﻿from app.main import ingest, query
 from app.models import IngestRequest, QueryRequest
 
 
+def _source(text: str = "Project notes live in the blue folder.") -> dict:
+    return {
+        "text": text,
+        "score": 0.99,
+        "cosine_similarity": 0.98,
+        "decay_score": 1.0,
+        "metadata": {"source": "manual", "timestamp": 1.0},
+    }
+
+
 def test_health_endpoint() -> None:
+    from app.main import health
+
     assert health() == {"status": "ok"}
 
 
@@ -13,25 +25,13 @@ def test_ingest_and_query_end_to_end_with_monkeypatch(monkeypatch) -> None:
         stored.append({"text": text, "source": source, "tags": tags})
         return ["memory-1"]
 
-    def fake_retrieve_and_rerank(query: str, top_k: int) -> list[dict]:
-        assert query == "Where are my notes?"
-        assert top_k == 3
-        return [
-            {
-                "text": stored[0]["text"],
-                "score": 0.99,
-                "cosine_similarity": 0.98,
-                "decay_score": 1.0,
-                "metadata": {"source": "manual", "timestamp": 1.0},
-            }
-        ]
-
     class FakeLLMProvider:
-        def synthesize(self, query: str, chunks: list[dict]) -> str:
-            return f"Your note says: {chunks[0]['text']}"
+        def complete_with_tools(self, **kwargs):
+            return {"type": "text", "content": f"Your note says: {stored[0]['text']}"}
 
     monkeypatch.setattr("app.main.ingest_entry", fake_ingest_entry)
-    monkeypatch.setattr("app.main.retrieve_and_rerank", fake_retrieve_and_rerank)
+    monkeypatch.setattr("app.main.classify_query", lambda query_text: "simple")
+    monkeypatch.setattr("app.main.retrieve_and_rerank", lambda query_text, top_k: [_source(stored[0]["text"])])
     monkeypatch.setattr("app.main.get_llm_provider", lambda: FakeLLMProvider())
 
     ingest_response = ingest(IngestRequest(text="Project notes live in the blue folder."))

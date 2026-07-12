@@ -1,4 +1,5 @@
-from datetime import datetime
+﻿from datetime import datetime
+import json
 from typing import Any
 
 from groq import Groq
@@ -39,6 +40,53 @@ class GroqProvider(LLMProvider):
         )
         return response.choices[0].message.content or ""
 
+    def complete(self, system_prompt: str, user_message: str, temperature: float = 0.2) -> str:
+        if not self.api_key:
+            return ""
+
+        response = self._client().chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message},
+            ],
+            temperature=temperature,
+            max_tokens=800,
+        )
+        return response.choices[0].message.content or ""
+
+    def complete_with_tools(
+        self,
+        system_prompt: str,
+        user_message: str,
+        tools: list[dict[str, Any]],
+        temperature: float = 0.2,
+    ) -> dict[str, Any]:
+        if not self.api_key:
+            return {"type": "text", "content": ""}
+
+        response = self._client().chat.completions.create(
+            model=self.model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_message},
+            ],
+            tools=tools,
+            tool_choice="auto",
+            temperature=temperature,
+            max_tokens=800,
+        )
+        message = response.choices[0].message
+
+        if message.tool_calls:
+            call = message.tool_calls[0]
+            return {
+                "type": "tool_call",
+                "name": call.function.name,
+                "arguments": json.loads(call.function.arguments or "{}"),
+            }
+        return {"type": "text", "content": message.content or ""}
+
     def _client(self) -> Groq:
         if self.client is None:
             self.client = Groq(api_key=self.api_key)
@@ -53,3 +101,4 @@ class GroqProvider(LLMProvider):
             source = metadata.get("source", "unknown")
             context_blocks.append(f"[{date_str} | source: {source}]\n{chunk.get('text', '')}")
         return "\n\n---\n\n".join(context_blocks)
+

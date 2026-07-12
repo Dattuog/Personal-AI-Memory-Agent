@@ -1,4 +1,4 @@
-from typing import Any
+﻿from typing import Any
 
 from pinecone import Pinecone
 
@@ -36,3 +36,9 @@ class PineconeStore(VectorStore):
 
     def delete(self, id: str) -> None:
         self.index.delete(ids=[id])
+
+    def list_all(self, limit: int = 1000) -> list[dict[str, Any]]:
+        raise NotImplementedError("Scheduled self-review list_all is currently implemented for Chroma only.")
+
+    def update_metadata(self, id: str, metadata: dict[str, Any]) -> None:
+        self.index.update(id=id, set_metadata=metadata)

@@ -1,4 +1,4 @@
-from typing import Any
+﻿from typing import Any
 
 import chromadb
 
@@ -50,3 +50,19 @@ class ChromaStore(VectorStore):
 
     def delete(self, id: str) -> None:
         self.collection.delete(ids=[id])
+
+    def list_all(self, limit: int = 1000) -> list[dict[str, Any]]:
+        result = self.collection.get(limit=limit)
+        rows: list[dict[str, Any]] = []
+        ids = result.get("ids", [])
+        docs = result.get("documents", [])
+        metadatas = result.get("metadatas", [])
+        for item_id, text, metadata in zip(ids, docs, metadatas, strict=False):
+            rows.append({"id": item_id, "text": text, "metadata": metadata or {}})
+        return rows
+
+    def update_metadata(self, id: str, metadata: dict[str, Any]) -> None:
+        existing = self.collection.get(ids=[id])
+        current_meta = (existing.get("metadatas") or [{}])[0] or {}
+        current_meta.update(metadata)
+        self.collection.update(ids=[id], metadatas=[current_meta])

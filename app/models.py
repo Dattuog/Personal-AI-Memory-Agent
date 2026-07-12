@@ -1,4 +1,4 @@
-from typing import Any
+﻿from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -37,4 +37,8 @@ class QueryResult(BaseModel):
 
 class QueryResponse(BaseModel):
     answer: str
+    action_taken: str | None = None
+    action_result: dict[str, Any] | None = None
     sources: list[QueryResult]
+    plan: list[str] | None = None
+    missing_info: list[str] | None = None

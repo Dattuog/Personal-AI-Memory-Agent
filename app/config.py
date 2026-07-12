@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
+﻿from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     rerank_alpha: float = 0.7
     decay_half_life_days: float = 7.0
     similarity_threshold: float = 0.75
+    self_review_interval_hours: float = 24.0
+    self_review_cooldown_hours: float = 48.0
 
 
 settings = Settings()
